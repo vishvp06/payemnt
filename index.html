@@ -94,6 +94,10 @@
 
                     <!-- State B: Student Info Dashboard (Hidden initially) -->
                     <div id="studentDashboard" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 25px;">
+                            <h3 style="color: var(--primary-color); font-weight: 700; font-size: 16px;">Student Fee Summary</h3>
+                            <button type="button" class="btn-primary" id="studentLogoutBtn" style="background-color: var(--text-muted); padding: 6px 14px; font-size: 12px;">Logout</button>
+                        </div>
                         <section class="student-info-section">
                             <div class="student-info-grid">
                                 <div class="info-field">
@@ -166,6 +170,82 @@
                                 <div class="amount-box" id="totalAmountBox">INR 0</div>
                             </div>
                             <button class="btn-primary" id="payNowBtn" disabled>Fee collected</button>
+                        </div>
+                    </div>
+
+                    <!-- State C: Admin Control Panel (Hidden initially) -->
+                    <div id="adminDashboard" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 25px;">
+                            <h3 style="color: var(--primary-color); font-weight: 700; font-size: 18px;">Admin Control Panel</h3>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <label style="font-weight: 600; font-size: 13px; color: var(--text-muted);">Student:</label>
+                                    <select id="adminStudentSelect" class="form-control" style="width: 150px; padding: 6px 10px; font-size: 13px; height: auto;"></select>
+                                </div>
+                                <button type="button" class="btn-primary" id="adminLogoutBtn" style="background-color: var(--text-muted); padding: 6px 14px; font-size: 12px;">Logout</button>
+                            </div>
+                        </div>
+
+                        <!-- Section 1: Edit Student Profile -->
+                        <div class="admin-card" style="background: var(--bg-light); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 25px;">
+                            <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span>Edit Student Profile</span>
+                                <button type="button" class="btn-primary" id="saveProfileBtn" style="padding: 6px 16px; font-size: 12px; background-color: var(--primary-color);">Save Profile</button>
+                            </h4>
+                            <div class="student-info-grid">
+                                <div class="info-field">
+                                    <label>Student's Name:</label>
+                                    <input type="text" id="adminStudentName" class="form-control">
+                                </div>
+                                <div class="info-field">
+                                    <label>Father's Name:</label>
+                                    <input type="text" id="adminStudentFather" class="form-control">
+                                </div>
+                                <div class="info-field">
+                                    <label>Email:</label>
+                                    <input type="email" id="adminStudentEmail" class="form-control">
+                                </div>
+                                <div class="info-field">
+                                    <label>Mobile Number:</label>
+                                    <input type="text" id="adminStudentMobile" class="form-control">
+                                </div>
+                                <div class="info-field">
+                                    <label>Course:</label>
+                                    <input type="text" id="adminStudentCourse" class="form-control">
+                                </div>
+                                <div class="info-field">
+                                    <label>Specialization:</label>
+                                    <input type="text" id="adminStudentSpec" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Manage Fee Items -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main);">Manage Fee Items</h4>
+                                <button type="button" class="btn-primary" id="addFeeItemBtn" style="padding: 6px 16px; font-size: 12px; background-color: #27ae60;">+ Add Fee Item</button>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Fees Type</th>
+                                            <th>Period</th>
+                                            <th>Amount</th>
+                                            <th>Last Date</th>
+                                            <th>Late Fee</th>
+                                            <th>Total Fee</th>
+                                            <th style="text-align: center; width: 150px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminFeesTableBody">
+                                        <!-- Loaded dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -354,6 +434,53 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal 3: Add/Edit Fee Item -->
+    <div class="modal-overlay" id="feeModal">
+        <div class="modal-card" style="max-width: 450px;">
+            <div class="modal-header" style="background: var(--primary-color);">
+                <h3 id="feeModalTitle">Add Fee Item</h3>
+                <button class="close-modal" id="feeModalClose">&times;</button>
+            </div>
+            <form id="feeItemForm">
+                <input type="hidden" id="feeItemIndex">
+                <div class="modal-body">
+                    <div class="form-group" style="max-width: 100%;">
+                        <label>Status</label>
+                        <select id="feeItemStatus" class="form-control">
+                            <option value="Unpaid">Unpaid</option>
+                            <option value="Success">Paid (Success)</option>
+                        </select>
+                      </div>
+                      <div class="form-group" style="max-width: 100%;">
+                          <label>Fees Type</label>
+                          <input type="text" id="feeItemType" class="form-control" required placeholder="e.g. NPTEL EXAM FEE - CLOUD COMPUTING">
+                      </div>
+                      <div class="form-group" style="max-width: 100%;">
+                          <label>Period</label>
+                          <input type="text" id="feeItemPeriod" class="form-control" required placeholder="e.g. JUL-DEC 2026">
+                      </div>
+                      <div class="cc-details-grid" style="margin-bottom: 0;">
+                          <div class="form-group">
+                              <label>Amount (INR)</label>
+                              <input type="number" id="feeItemAmount" class="form-control" required min="0">
+                          </div>
+                          <div class="form-group">
+                              <label>Late Fee (INR)</label>
+                              <input type="number" id="feeItemLate" class="form-control" value="0" min="0">
+                          </div>
+                      </div>
+                      <div class="form-group" style="max-width: 100%;">
+                          <label>Last Date</label>
+                          <input type="text" id="feeItemLastDate" class="form-control" placeholder="dd/mm/yyyy" required>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="submit" class="btn-primary" style="background-color: #27ae60;">Save Fee Item</button>
+                  </div>
+              </form>
+          </div>
+      </div>
 
     <!-- Scripts -->
     <script src="app.js"></script>

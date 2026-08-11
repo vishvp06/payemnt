@@ -885,3 +885,37 @@ tr:hover td {
         padding: 20px 15px;
     }
 }
+
+/* Admin Panel Utility styles */
+.btn-danger {
+    background-color: var(--accent-red);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-danger:hover {
+    background-color: #801418;
+}
+
+.btn-edit {
+    background-color: #1f3a52;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 5px;
+}
+
+.btn-edit:hover {
+    background-color: #122230;
+}

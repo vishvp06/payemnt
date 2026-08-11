@@ -199,6 +199,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Admin login check
+        if (roll === "23CB062@ADMIN" && dob === "2006-04-06") {
+            loginError.style.display = "none";
+            loadAdminDashboard();
+            return;
+        }
+
         const db = JSON.parse(localStorage.getItem("nptel_students_v3"));
         const student = db[roll];
 
@@ -645,4 +652,205 @@ document.addEventListener("DOMContentLoaded", () => {
             historyTableBody.appendChild(tr);
         });
     }
+
+    // -------------------------------------------------------------
+    // 9. Logout Buttons
+    // -------------------------------------------------------------
+    document.getElementById("studentLogoutBtn").addEventListener("click", () => {
+        currentStudent = null;
+        selectedFees.clear();
+        studentDashboard.style.display = "none";
+        loginFormContainer.style.display = "block";
+        loginForm.reset();
+        loginError.style.display = "none";
+    });
+
+    document.getElementById("adminLogoutBtn").addEventListener("click", () => {
+        document.getElementById("adminDashboard").style.display = "none";
+        loginFormContainer.style.display = "block";
+        loginForm.reset();
+        loginError.style.display = "none";
+    });
+
+    // -------------------------------------------------------------
+    // 10. Admin Dashboard — Full Implementation
+    // -------------------------------------------------------------
+    const adminDashboard     = document.getElementById("adminDashboard");
+    const adminStudentSelect = document.getElementById("adminStudentSelect");
+    const adminStudentName   = document.getElementById("adminStudentName");
+    const adminStudentFather = document.getElementById("adminStudentFather");
+    const adminStudentEmail  = document.getElementById("adminStudentEmail");
+    const adminStudentMobile = document.getElementById("adminStudentMobile");
+    const adminStudentCourse = document.getElementById("adminStudentCourse");
+    const adminStudentSpec   = document.getElementById("adminStudentSpec");
+    const adminFeesTableBody = document.getElementById("adminFeesTableBody");
+    const saveProfileBtn     = document.getElementById("saveProfileBtn");
+    const addFeeItemBtn      = document.getElementById("addFeeItemBtn");
+    const feeModal           = document.getElementById("feeModal");
+    const feeModalClose      = document.getElementById("feeModalClose");
+    const feeModalTitle      = document.getElementById("feeModalTitle");
+    const feeItemForm        = document.getElementById("feeItemForm");
+    const feeItemIndex       = document.getElementById("feeItemIndex");
+    const feeItemStatus      = document.getElementById("feeItemStatus");
+    const feeItemType        = document.getElementById("feeItemType");
+    const feeItemPeriod      = document.getElementById("feeItemPeriod");
+    const feeItemAmount      = document.getElementById("feeItemAmount");
+    const feeItemLate        = document.getElementById("feeItemLate");
+    const feeItemLastDate    = document.getElementById("feeItemLastDate");
+
+    let adminCurrentRoll = null;
+
+    function loadAdminDashboard() {
+        loginFormContainer.style.display = "none";
+        studentDashboard.style.display = "none";
+        adminDashboard.style.display = "block";
+
+        const db = JSON.parse(localStorage.getItem("nptel_students_v3"));
+        adminStudentSelect.innerHTML = "";
+        Object.keys(db).forEach(roll => {
+            const opt = document.createElement("option");
+            opt.value = roll;
+            opt.text  = roll + " — " + db[roll].name;
+            adminStudentSelect.appendChild(opt);
+        });
+
+        const firstRoll = Object.keys(db)[0];
+        if (firstRoll) {
+            adminCurrentRoll = firstRoll;
+            loadAdminStudentProfile(firstRoll);
+        }
+    }
+
+    adminStudentSelect.addEventListener("change", () => {
+        adminCurrentRoll = adminStudentSelect.value;
+        loadAdminStudentProfile(adminCurrentRoll);
+    });
+
+    function loadAdminStudentProfile(roll) {
+        const db = JSON.parse(localStorage.getItem("nptel_students_v3"));
+        const s  = db[roll];
+        if (!s) return;
+        adminStudentName.value   = s.name;
+        adminStudentFather.value = s.fatherName;
+        adminStudentEmail.value  = s.email;
+        adminStudentMobile.value = s.mobile;
+        adminStudentCourse.value = s.course;
+        adminStudentSpec.value   = s.specialization;
+        renderAdminFeesTable(s.fees);
+    }
+
+    function renderAdminFeesTable(fees) {
+        adminFeesTableBody.innerHTML = "";
+        fees.forEach((fee, idx) => {
+            const tr = document.createElement("tr");
+            const badgeClass = fee.status === "Success" ? "success" : "unpaid";
+            tr.innerHTML = `
+                <td><span class="status-badge ${badgeClass}">${fee.status}</span></td>
+                <td>${fee.type}</td>
+                <td>${fee.period}</td>
+                <td>&#8377;${fee.amount.toLocaleString()}</td>
+                <td>${fee.lastDate}</td>
+                <td>&#8377;${fee.lateFee}</td>
+                <td>&#8377;${fee.totalFee.toLocaleString()}</td>
+                <td style="text-align:center; white-space:nowrap;">
+                    <button class="btn-edit" data-idx="${idx}">&#9998; Edit</button>
+                    <button class="btn-danger" data-idx="${idx}">&#128465; Delete</button>
+                </td>
+            `;
+            adminFeesTableBody.appendChild(tr);
+        });
+
+        adminFeesTableBody.querySelectorAll(".btn-edit").forEach(btn => {
+            btn.addEventListener("click", () => openFeeModal(parseInt(btn.dataset.idx)));
+        });
+        adminFeesTableBody.querySelectorAll(".btn-danger").forEach(btn => {
+            btn.addEventListener("click", () => deleteFeeItem(parseInt(btn.dataset.idx)));
+        });
+    }
+
+    saveProfileBtn.addEventListener("click", () => {
+        if (!adminCurrentRoll) return;
+        const db = JSON.parse(localStorage.getItem("nptel_students_v3"));
+        const s  = db[adminCurrentRoll];
+        s.name           = adminStudentName.value.trim();
+        s.fatherName     = adminStudentFather.value.trim();
+        s.email          = adminStudentEmail.value.trim();
+        s.mobile         = adminStudentMobile.value.trim();
+        s.course         = adminStudentCourse.value.trim();
+        s.specialization = adminStudentSpec.value.trim();
+        db[adminCurrentRoll] = s;
+        localStorage.setItem("nptel_students_v3", JSON.stringify(db));
+
+        const orig = saveProfileBtn.innerText;
+        saveProfileBtn.innerText = "✅ Saved!";
+        saveProfileBtn.style.backgroundColor = "#27ae60";
+        setTimeout(() => {
+            saveProfileBtn.innerText = orig;
+            saveProfileBtn.style.backgroundColor = "";
+        }, 2000);
+    });
+
+    function deleteFeeItem(idx) {
+        if (!adminCurrentRoll) return;
+        if (!confirm("Are you sure you want to delete this fee item?")) return;
+        const db = JSON.parse(localStorage.getItem("nptel_students_v3"));
+        db[adminCurrentRoll].fees.splice(idx, 1);
+        localStorage.setItem("nptel_students_v3", JSON.stringify(db));
+        renderAdminFeesTable(db[adminCurrentRoll].fees);
+    }
+
+    function openFeeModal(editIdx) {
+        feeItemForm.reset();
+        if (editIdx === null || editIdx === undefined) {
+            feeModalTitle.innerText = "Add New Fee Item";
+            feeItemIndex.value = "";
+        } else {
+            feeModalTitle.innerText = "Edit Fee Item";
+            feeItemIndex.value = editIdx;
+            const db  = JSON.parse(localStorage.getItem("nptel_students_v3"));
+            const fee = db[adminCurrentRoll].fees[editIdx];
+            feeItemStatus.value   = fee.status;
+            feeItemType.value     = fee.type;
+            feeItemPeriod.value   = fee.period;
+            feeItemAmount.value   = fee.amount;
+            feeItemLate.value     = fee.lateFee;
+            feeItemLastDate.value = fee.lastDate;
+        }
+        feeModal.style.display = "flex";
+    }
+
+    addFeeItemBtn.addEventListener("click", () => openFeeModal(null));
+    feeModalClose.addEventListener("click", () => { feeModal.style.display = "none"; });
+
+    feeItemForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!adminCurrentRoll) return;
+
+        const db   = JSON.parse(localStorage.getItem("nptel_students_v3"));
+        const amt  = parseFloat(feeItemAmount.value) || 0;
+        const late = parseFloat(feeItemLate.value)   || 0;
+
+        const newFee = {
+            id:       "fee_" + Date.now(),
+            status:   feeItemStatus.value,
+            type:     feeItemType.value.trim(),
+            period:   feeItemPeriod.value.trim(),
+            amount:   amt,
+            lateFee:  late,
+            totalFee: amt + late,
+            lastDate: feeItemLastDate.value.trim()
+        };
+
+        const idx = feeItemIndex.value;
+        if (idx !== "" && idx !== null && idx !== undefined && idx !== "null") {
+            newFee.id = db[adminCurrentRoll].fees[parseInt(idx)].id;
+            db[adminCurrentRoll].fees[parseInt(idx)] = newFee;
+        } else {
+            db[adminCurrentRoll].fees.push(newFee);
+        }
+
+        localStorage.setItem("nptel_students_v3", JSON.stringify(db));
+        feeModal.style.display = "none";
+        renderAdminFeesTable(db[adminCurrentRoll].fees);
+    });
 });
