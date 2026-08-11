@@ -1,0 +1,31 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <pattern id="stripes-orange" width="5" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+            <line x1="0" y1="0" x2="0" y2="10" stroke="#e07a22" stroke-width="2.5" />
+        </pattern>
+        <pattern id="stripes-red" width="5" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+            <line x1="0" y1="0" x2="0" y2="10" stroke="#a91d22" stroke-width="2.5" />
+        </pattern>
+    </defs>
+    
+    <!-- Left Bracket -->
+    <path d="M 43 6 A 44 44 0 0 0 43 94" stroke="url(#stripes-orange)" stroke-width="8.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Right Bracket -->
+    <path d="M 57 6 A 44 44 0 0 1 57 94" stroke="url(#stripes-red)" stroke-width="8.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Central Flower (8 petals) -->
+    <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(0 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+    <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(45 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+    <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(90 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+    <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(135 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+    
+    <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(0 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+    <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(45 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+    <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(90 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+    <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(135 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+    
+    <!-- Core -->
+    <path d="M 50 45 L 51.5 48.5 L 55 50 L 51.5 51.5 L 50 55 L 48.5 51.5 L 45 50 L 48.5 48.5 Z" fill="#a91d22" />
+    <circle cx="50" cy="50" r="1.5" fill="#ffffff" />
+</svg>

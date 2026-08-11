@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPTEL SWAYAM Courses - Fee Payment Portal</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Curved Banner Background -->
+    <div class="banner-container">
+        <!-- SVG wave divider curve -->
+        <svg class="banner-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C360,85 720,85 1080,40 C1200,25 1320,15 1440,0 L1440,80 L0,80 Z"></path>
+        </svg>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <div class="main-card">
+            
+            <!-- Card Header (Logo + Titles) -->
+            <header class="card-header">
+                <div class="logo-container">
+                    <!-- SVG replica of the NPTEL logo -->
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="stripes-orange" width="5" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+                                <line x1="0" y1="0" x2="0" y2="10" stroke="#e07a22" stroke-width="2.5" />
+                            </pattern>
+                            <pattern id="stripes-red" width="5" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+                                <line x1="0" y1="0" x2="0" y2="10" stroke="#a91d22" stroke-width="2.5" />
+                            </pattern>
+                        </defs>
+                        
+                        <!-- Left Bracket (Orange stripes) -->
+                        <path d="M 43 6 A 44 44 0 0 0 43 94" stroke="url(#stripes-orange)" stroke-width="8.5" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Right Bracket (Red stripes) -->
+                        <path d="M 57 6 A 44 44 0 0 1 57 94" stroke="url(#stripes-red)" stroke-width="8.5" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Central Flower (8 petals) -->
+                        <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(0 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+                        <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(45 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+                        <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(90 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+                        <ellipse cx="50" cy="50" rx="7" ry="24" transform="rotate(135 50 50)" stroke="#e07a22" stroke-width="1.8" fill="none" />
+                        
+                        <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(0 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+                        <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(45 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+                        <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(90 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+                        <ellipse cx="50" cy="50" rx="4.5" ry="18" transform="rotate(135 50 50)" stroke="#a91d22" stroke-width="1.2" fill="none" />
+                        
+                        <!-- Core -->
+                        <path d="M 50 45 L 51.5 48.5 L 55 50 L 51.5 51.5 L 50 55 L 48.5 51.5 L 45 50 L 48.5 48.5 Z" fill="#a91d22" />
+                        <circle cx="50" cy="50" r="1.5" fill="#ffffff" />
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>NPTEL SWAYAM Courses</h1>
+                    <h2>National Programme on Technology Enhanced Learning</h2>
+                    <p>Online Exam & Course Fee Payment Portal</p>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="tab-navigation">
+                <button class="tab-button active" id="formTabBtn">Form</button>
+                <button class="tab-button" id="historyTabBtn">Payment History</button>
+            </nav>
+
+            <!-- Card Body Content -->
+            <div class="tab-content">
+                
+                <!-- Panel 1: FORM -->
+                <div class="panel active" id="formPanel">
+                    
+                    <!-- State A: Student Login/Verification -->
+                    <div id="loginFormContainer">
+                        <form id="loginForm" autocomplete="off">
+                            <div class="form-group">
+                                <label for="rollNo">Enter Your Roll No</label>
+                                <input type="text" id="rollNo" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Enter Your DOB</label>
+                                <input type="date" id="dob" class="form-control" required>
+                            </div>
+                            <div class="error-message" id="loginError">Verification failed. Please check credentials.</div>
+                            <button type="submit" class="btn-primary" style="margin-top: 10px;">Pay Now</button>
+                        </form>
+                    </div>
+
+                    <!-- State B: Student Info Dashboard (Hidden initially) -->
+                    <div id="studentDashboard" style="display: none;">
+                        <section class="student-info-section">
+                            <div class="student-info-grid">
+                                <div class="info-field">
+                                    <label>Roll Number :</label>
+                                    <div class="info-value-box" id="studentRoll"></div>
+                                </div>
+                                <div class="info-field">
+                                    <label>Student's Name :</label>
+                                    <div class="info-value-box" id="studentName"></div>
+                                </div>
+                                <div class="info-field">
+                                    <label>Father's Name :</label>
+                                    <div class="info-value-box" id="studentFatherName"></div>
+                                </div>
+                                <div class="info-field">
+                                    <label>Email : <span class="required">*</span></label>
+                                    <input type="email" id="studentEmail" class="info-value-box editable" required>
+                                </div>
+                                <div class="info-field">
+                                    <label>Mobile Number : <span class="required">*</span></label>
+                                    <input type="tel" id="studentMobile" class="info-value-box editable" required>
+                                </div>
+                                <div class="info-field">
+                                    <label>DOB :</label>
+                                    <div class="info-value-box" id="studentDob"></div>
+                                </div>
+                                <div class="info-field">
+                                    <label>Course :</label>
+                                    <div class="info-value-box" id="studentCourse"></div>
+                                </div>
+                                <div class="info-field">
+                                    <label>Specialization :</label>
+                                    <div class="info-value-box" id="studentSpec"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Fees Table Filters -->
+                        <div class="table-filters">
+                            <button class="filter-button" id="filterUnpaid">Un Paid</button>
+                            <button class="filter-button" id="filterPaid">Paid</button>
+                            <button class="filter-button active" id="filterAll">All</button>
+                        </div>
+
+                        <!-- Fees Table -->
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Fees Type</th>
+                                        <th>Period</th>
+                                        <th>Amount</th>
+                                        <th>Last Date</th>
+                                        <th>Late Fee</th>
+                                        <th>Total Fee</th>
+                                        <th style="text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feesTableBody">
+                                    <!-- Dynamic rows from app.js -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bottom Summation Bar -->
+                        <div class="pay-bar">
+                            <div class="amount-display-group">
+                                <span class="pay-bar-label">Total Amount :</span>
+                                <div class="amount-box" id="totalAmountBox">INR 0</div>
+                            </div>
+                            <button class="btn-primary" id="payNowBtn" disabled>Fee collected</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: PAYMENT HISTORY -->
+                <div class="panel" id="historyPanel">
+                    <div id="emptyHistoryMessage" class="history-empty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 50px; height: 50px; stroke: #a6acaf;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <p style="margin-top: 15px;">Please verify your student identity on the "Form" tab first.</p>
+                    </div>
+
+                    <div id="historyTableContainer" style="display: none;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Date & Time</th>
+                                        <th>Total Paid</th>
+                                        <th>Payment Mode</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTableBody">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1: Mock Cashfree Checkout Gateway -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-card">
+            <div class="modal-header" style="background: #1d2f44;">
+                <h3>Cashfree Payments</h3>
+                <button class="close-modal" id="checkoutClose">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Gateway Details -->
+                <div id="gatewayBody">
+                    <div class="gateway-summary">
+                        <span>Total Checkout Sum:</span>
+                        <span class="amount" id="modalTotalAmount">INR 0</span>
+                    </div>
+
+                    <!-- Payment Mode Selector -->
+                    <div class="payment-tabs">
+                        <button class="pay-tab active" data-target="cardPay">Credit/Debit Card</button>
+                        <button class="pay-tab" data-target="netPay">Net Banking</button>
+                        <button class="pay-tab" data-target="upiPay">UPI</button>
+                    </div>
+
+                    <form id="paymentForm">
+                        <!-- Cards Form -->
+                        <div class="pay-option-content active" id="cardPay">
+                            <div class="form-group" style="max-width: 100%;">
+                                <label>Cardholder Name</label>
+                                <input type="text" class="form-control" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group" style="max-width: 100%;">
+                                <label>Card Number</label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9101 1121" maxlength="19" required>
+                            </div>
+                            <div class="cc-details-grid">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="password" class="form-control" placeholder="***" maxlength="3" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Net Banking Form -->
+                        <div class="pay-option-content" id="netPay">
+                            <div class="form-group" style="max-width: 100%;">
+                                <label>Select Bank</label>
+                                <select class="form-control">
+                                    <option>State Bank of India</option>
+                                    <option>HDFC Bank</option>
+                                    <option>ICICI Bank</option>
+                                    <option>Axis Bank</option>
+                                    <option>Punjab National Bank</option>
+                                </select>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-muted);">You will be redirected to the secure page of the bank to authorize the transaction.</p>
+                        </div>
+
+                        <!-- UPI Form -->
+                        <div class="pay-option-content" id="upiPay">
+                            <div class="form-group" style="max-width: 100%;">
+                                <label>UPI ID (VPA)</label>
+                                <input type="text" class="form-control" placeholder="username@upi">
+                            </div>
+                            <div style="text-align: center; margin: 15px 0;">
+                                <div style="display: inline-block; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; background: white;">
+                                    <!-- Simple QR code simulation using a styled square -->
+                                    <div style="width: 120px; height: 120px; background: repeating-conic-gradient(from 45deg, #000 0deg 90deg, #fff 90deg 180deg) 0 0/12px 12px; display: flex; align-items: center; justify-content: center; border: 4px solid #fff;">
+                                        <div style="background: white; padding: 5px; font-weight: bold; font-size: 10px; border: 2px solid black;">UPI</div>
+                                    </div>
+                                </div>
+                                <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Scan QR using GooglePay, PhonePe, or BHIM</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Proceed Securely</button>
+                    </form>
+                </div>
+
+                <!-- Spinner Loader screen during processing -->
+                <div id="checkoutLoader" class="loader-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <h4 style="font-size: 16px; margin-bottom: 5px;">Connecting to Bank Gateway...</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); text-align: center;">Processing your secure authorization. Please wait and do not close this window.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Payment Receipt -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="modal-card" style="max-width: 440px;">
+            <div class="modal-header" style="background: #196f3d;">
+                <h3>Transaction Success</h3>
+                <button class="close-modal" id="receiptClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">&#10004;</div>
+                <div class="receipt-header">
+                    <h4>Payment Verified</h4>
+                    <p>NPTEL SWAYAM Online Examinations</p>
+                </div>
+                
+                <div class="receipt-details-list">
+                    <div class="receipt-row">
+                        <span class="label">Roll Number:</span>
+                        <span class="val" id="receiptRoll"></span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Student Name:</span>
+                        <span class="val" id="receiptName"></span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Transaction ID:</span>
+                        <span class="val" id="receiptTxn" style="font-family: monospace;"></span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Date & Time:</span>
+                        <span class="val" id="receiptDate"></span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="label">Payment Mode:</span>
+                        <span class="val" id="receiptMode"></span>
+                    </div>
+                    
+                    <div style="margin: 15px 0 10px 0; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">
+                        Fee Details
+                    </div>
+                    
+                    <!-- Paid fee items listed here -->
+                    <div id="receiptItemsContainer"></div>
+                    
+                    <div class="receipt-row receipt-total-row">
+                        <span>Total Fees Paid:</span>
+                        <span id="receiptTotal"></span>
+                    </div>
+                </div>
+
+                <p style="font-size: 11px; text-align: center; color: var(--text-muted); margin-bottom: 20px; line-height: 1.4;">
+                    This is an automated system confirmation. You will also receive an email notification on your registered email address with the receipt details.
+                </p>
+            </div>
+            <div class="modal-footer" style="padding: 15px 20px;">
+                <button class="btn-primary" id="printReceiptBtn">Print / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
